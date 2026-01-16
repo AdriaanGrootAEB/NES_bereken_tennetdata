@@ -111,7 +111,7 @@ def proces_definitive_quarter_prices(response_data, datum_import):
     verreken_data['IdDatumUurMinuut'] = [int(datetime.strftime(daytime, format = '%Y%m%d%H%M')) for daytime in verreken_data['DatumTijd']]
     verreken_data['DatumTijd_eind'] = pd.to_datetime(verreken_data['timeInterval_end'], format = '%Y-%m-%dT%H:%M')
     
-    # join with EPEX
+    # join with datum
     # import might return object which causes merge error. Therefore, transform both to int
     verreken_data['isp'] =  verreken_data['isp'].astype(int)
     datum_data['isp'] =  datum_data['isp'].astype(int)
@@ -172,11 +172,11 @@ def calculate_meritorder_data(response_data, EPEX_prijzen, datum_data):
         elif cat == '_vs_EPEX':
             price_categories_plus = [[-10000,-200],[-200,-50],[-50,0],[0,20],[20,50],[50,100],[100,200],[200,500],[500,1000],[1000,10000]]
             price_categories_min = [[-10000,-1000],[-1000,-500],[-500,-200],[-200,-100],[-100,-50],[-50,-20],[-20,0],[0,50],[50,200],[200,10000]][::-1]
-        
-        bied_data_total[f'price_category{cat}'] = [[f'+{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
-                                                    for cat_num, cat_val in enumerate(price_categories_plus) if price >= cat_val[0] and price < cat_val[1]][0] if threshold > 0
-                                                    else [f'-{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
-                                                    for cat_num, cat_val in enumerate(price_categories_min) if price >= cat_val[0] and price < cat_val[1]][0]
+
+        bied_data_total[f'price_category{cat}'] = [([f'+{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
+                                                        for cat_num, cat_val in enumerate(price_categories_plus) if price >= cat_val[0] and price < cat_val[1]] + ['No_data'])[0] if threshold > 0
+                                                    else ([f'-{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
+                                                        for cat_num, cat_val in enumerate(price_categories_min) if price >= cat_val[0] and price < cat_val[1]] + ['No_data'])[0]
                                                     for price, threshold in zip(bied_data_total[f'price{cat}'],bied_data_total['capacity_threshold'])]
         bied_data_total[f'price_category_name{cat}'] = [cat[4:] for cat in bied_data_total[f'price_category{cat}']]
 

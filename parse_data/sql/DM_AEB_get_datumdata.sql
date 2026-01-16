@@ -4,5 +4,5 @@ SELECT
     IdDatum,
     DatumUurMinuut
 FROM VW_AEB_D_DatumUurMinuut
-    WHERE IdDatumUurMinuut_UTC >= {IdDatumUurMinuutUTC_lowerbound}
-    AND IdDatumUurMinuut_UTC < {IdDatumUurMinuutUTC_higherbound}
+    WHERE IdDatumUurMinuut >= {IdDatumUurMinuut_lowerbound}
+    AND IdDatumUurMinuut < {IdDatumUurMinuut_higherbound}

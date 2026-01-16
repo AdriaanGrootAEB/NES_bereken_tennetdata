@@ -13,9 +13,9 @@ def generate_SQL(params, filename):
     sql_query = sql_template.format(**params)   
     return(sql_query)
 
-def get_datumdata(servername, IdDatumUurMinuutUTC_bounds):    
-    params = {'IdDatumUurMinuutUTC_lowerbound': IdDatumUurMinuutUTC_bounds[0],
-    'IdDatumUurMinuutUTC_higherbound': IdDatumUurMinuutUTC_bounds[1]}
+def get_datumdata(servername, IdDatumUurMinuut_bounds):    
+    params = {'IdDatumUurMinuut_lowerbound': IdDatumUurMinuut_bounds[0],
+    'IdDatumUurMinuut_higherbound': IdDatumUurMinuut_bounds[1]}
     sql_query = generate_SQL(params, 'DM_AEB_get_datumdata.sql')   
     datum_import = SQL_functions.DWH_connection_SQL_views(sql_query, database_name = 'DM_AEB', server_name = servername)
     

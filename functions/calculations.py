@@ -173,12 +173,12 @@ def calculate_meritorder_data(response_data, EPEX_prijzen, datum_data):
             price_categories_plus = [[-10000,-200],[-200,-50],[-50,0],[0,20],[20,50],[50,100],[100,200],[200,500],[500,1000],[1000,10000]]
             price_categories_min = [[-10000,-1000],[-1000,-500],[-500,-200],[-200,-100],[-100,-50],[-50,-20],[-20,0],[0,50],[50,200],[200,10000]][::-1]
 
-        bied_data_total[f'price_category{cat}'] = [([f'+{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
+        bied_data_total[f'price_category_name{cat}'] = [([f'+{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
                                                         for cat_num, cat_val in enumerate(price_categories_plus) if price >= cat_val[0] and price < cat_val[1]] + ['No_data'])[0] if threshold > 0
                                                     else ([f'-{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
                                                         for cat_num, cat_val in enumerate(price_categories_min) if price >= cat_val[0] and price < cat_val[1]] + ['No_data'])[0]
                                                     for price, threshold in zip(bied_data_total[f'price{cat}'],bied_data_total['capacity_threshold'])]
-        bied_data_total[f'price_category_name{cat}'] = [cat[4:] for cat in bied_data_total[f'price_category{cat}']]
+        bied_data_total[f'price_category{cat}'] = [cat[4:] for cat in bied_data_total[f'price_category_name{cat}']]
 
         bied_data_total[f'sum_price{cat}'] = np.abs(bied_data_total['capacity']) * bied_data_total[f'price{cat}']
 

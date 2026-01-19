@@ -30,7 +30,11 @@ def prepare_settlementdata(input_data):
         'Prijs_afnemen',
         'Prijs_invoeden', 
         'Regeltoestand']
-    )    
+    )
+    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]   
+    for col in ['dispatch_up', 'dispatch_down', 'Prijs_afnemen', 'Prijs_invoeden']:
+        export_data[col] = export_data[col].astype(float)
     return(export_data)
 
 def prepare_balancedelta_minutedata(input_data):
@@ -61,7 +65,9 @@ def prepare_balancedelta_minutedata(input_data):
         'mid_price',
         'balansdelta',
         'balansdelta_verschil']
-    )    
+    )
+    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind', 'DatumKwartier_start']:
+        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]        
     return(export_data)
 
 def prepare_balancedelta_quarterdata(input_data):
@@ -99,6 +105,8 @@ def prepare_balancedelta_quarterdata(input_data):
          'Vermogen_balansdelta_min_MW'         
          ]
     )    
+    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]        
     return(export_data)
 
 def prepare_bidsorders_details(input_data):
@@ -132,7 +140,11 @@ def prepare_bidsorders_details(input_data):
          'Prijs_categorie_naam',
          'Prijs_categorie_vs_EPEX',
          'Prijs_categorie_vs_EPEX_naam']
-    )    
+    )  
+    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]  
+    for col in ['Is_max_capacity', 'Is_min_capacity']:  
+        export_data[col] = [str(x) for x in export_data[col]]     
     return(export_data)
 
 def prepare_bidsorders_categories(input_data):
@@ -164,4 +176,6 @@ def prepare_bidsorders_categories(input_data):
          'capacity_threshold_max',      
          ]
     )    
+    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]
     return(export_data)

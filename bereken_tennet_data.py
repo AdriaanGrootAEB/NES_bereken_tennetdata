@@ -11,7 +11,7 @@ from parse_data import getdata
 from parse_data import writedata
 
 # parameters
-server_name = 'AEBAMIS02'
+server_name = 'AEBPMIS03'
 database_name = 'AMIS'
 
 if __name__ == "__main__":

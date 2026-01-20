@@ -18,7 +18,8 @@ if __name__ == "__main__":
     # get timing bounds
     datetime_to, datetime_from, iddatumuurminuut_from, iddatumuurminuut_to, iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to, \
     datetime_yesterday_from, datetime_yesterday_to, iddatumuurminuut_yesterday_from, iddatumuurminuut_yesterday_to, \
-    iddatum_yesterday_from, iddatum_yesterday_to = timing.get_timing_bounds()
+    iddatum_yesterday_from, iddatum_yesterday_to, datetime_from_merrit, datetime_to_merrit, \
+    iddatumuurminuut_to_merrit, iddatumuurminuut_UTC_to_merrit = timing.get_timing_bounds()
     
     # get data from Tennet API
     api_handler = API_handler.Handler()
@@ -31,15 +32,15 @@ if __name__ == "__main__":
     if do_balancedelta_data:
         balancedelta_data = api_handler.get_balancedelta_data(datetime_from, datetime_to)
     if do_merritorder_data:
-        meritorder_data = api_handler.get_meritorder_data(datetime_from, datetime_to)
+        meritorder_data = api_handler.get_meritorder_data(datetime_from_merrit, datetime_to_merrit)
     
-    # get datum and sEPEX prices from datawarehouse
+    # get datum and EPEX prices from datawarehouse
     if do_balancedelta_data or do_merritorder_data:
-        datum_data = getdata.get_datumdata(server_name,  [iddatumuurminuut_from, iddatumuurminuut_to])
+        datum_data = getdata.get_datumdata(server_name,  [iddatumuurminuut_from, iddatumuurminuut_to_merrit])
     if do_settlement_data:
         datum_yesterday_data = getdata.get_datumdata(server_name,  [iddatumuurminuut_yesterday_from, iddatumuurminuut_yesterday_to])
     if do_merritorder_data:
-        EPEX_prijzen = getdata.get_EPEX_data(server_name,  [iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to], datum_data)
+        EPEX_prijzen = getdata.get_EPEX_data(server_name,  [iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to_merrit], datum_data)  
     
     # calculate balancedelta, imbalance prices and bid order tables and proces realised settlement prices
     # ==== settlement data ====
@@ -79,7 +80,7 @@ if __name__ == "__main__":
         current_bid_orders_data = getdata.get_current_data_IdDatumUurMinuut_UTC(server_name, 'DS_E_Onbalans_Biedladder_Berekend', [iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to])
         # write to SQL
         SQL_functions.write_table(export_bid_order_details, database_name, server_name, 'DS_E_Onbalans_Biedladder_Details', [0,5], current_bid_orders_details_data)
-        SQL_functions.write_table(export_bid_orders, database_name, server_name, 'DS_E_Onbalans_Biedladder_Berekend', [0,6], current_bid_orders_data)
+        SQL_functions.write_table(export_bid_orders, database_name, server_name, 'DS_E_Onbalans_Biedladder_Berekend', [0,5,6], current_bid_orders_data)
 
     
     

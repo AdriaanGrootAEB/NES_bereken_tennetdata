@@ -141,8 +141,8 @@ def prepare_bidsorders_details(input_data):
          'Prijs_categorie_vs_EPEX',
          'Prijs_categorie_vs_EPEX_naam']
     )  
-    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
-        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]  
+    #for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+    #    export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]  
     for col in ['Is_max_capacity', 'Is_min_capacity']:  
         export_data[col] = [str(x) for x in export_data[col]]     
     return(export_data)
@@ -176,6 +176,6 @@ def prepare_bidsorders_categories(input_data):
          'capacity_threshold_max',      
          ]
     )    
-    for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
-        export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]
+    #for col in ['DatumUurMinuut_start','DatumUurMinuut_eind']:
+    #    export_data[col] = [x.strftime('%Y-%m-%d %H:%M:%S') for x in export_data[col]]
     return(export_data)

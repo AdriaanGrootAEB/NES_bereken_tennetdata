@@ -178,15 +178,15 @@ def calculate_meritorder_data(response_data, EPEX_prijzen, datum_data):
                                                     else ([f'-{alphabet[cat_num]}) ' + str(cat_val).replace(']',')') 
                                                         for cat_num, cat_val in enumerate(price_categories_min) if price >= cat_val[0] and price < cat_val[1]] + ['No_data'])[0]
                                                     for price, threshold in zip(bied_data_total[f'price{cat}'],bied_data_total['capacity_threshold'])]
-        bied_data_total[f'price_category{cat}'] = [cat[4:] for cat in bied_data_total[f'price_category_name{cat}']]
+        bied_data_total[f'price_category{cat}'] = [cat if cat == 'No_data' else cat[4:] for cat in bied_data_total[f'price_category_name{cat}']]
 
         bied_data_total[f'sum_price{cat}'] = np.abs(bied_data_total['capacity']) * bied_data_total[f'price{cat}']
 
         # sum capacities and price statistics
-        bied_data_total_export = bied_data_total[['capacity_threshold','isp','DatumTijd','price_category','price_category_name','capacity',f'price{cat}','sum_price']].groupby(
-            ['isp','DatumTijd','price_category','price_category_name']).agg(
+        bied_data_total_export = bied_data_total[['capacity_threshold','isp','DatumTijd',f'price_category{cat}',f'price_category_name{cat}','capacity',f'price{cat}',f'sum_price{cat}']].groupby(
+            ['isp','DatumTijd',f'price_category{cat}',f'price_category_name{cat}']).agg(
                 capacity_sum = ('capacity', 'sum'),
-                price_sum = ('sum_price', 'sum'),
+                price_sum = (f'sum_price{cat}', 'sum'),
                 price_min = (f'price{cat}', 'min'),
                 price_max = (f'price{cat}', 'max'),
                 capacity_threshold_min = ('capacity_threshold', 'min'),
@@ -197,9 +197,10 @@ def calculate_meritorder_data(response_data, EPEX_prijzen, datum_data):
         
         bied_data_total_export['price_comparison'] = 'vs nul' if cat == '' else 'vs_EPEX' if cat == '_vs_EPEX' else cat
         
-        bied_data_total_list += [bied_data_total_export]
-    bied_data_total_export = pd.concat(bied_data_total_list)
-    
+        bied_data_total_export_for_list = bied_data_total_export.copy()
+        bied_data_total_export_for_list.columns = [x.replace(cat,'') for x in bied_data_total_export_for_list.columns]
+        bied_data_total_list += [bied_data_total_export_for_list]
+    bied_data_total_export = pd.concat(bied_data_total_list)  
     
     # add datetime columns
     bied_data_total['DatumTijd_eind'] = [x + timedelta(minutes = 15) for x in bied_data_total['DatumTijd']]

@@ -20,6 +20,10 @@ def get_timing_bounds():
     datetime_to_merrit = datetime_to + timedelta(hours = 12)
     iddatumuurminuut_to_merrit = datetime_to_merrit.strftime('%Y%m%d%H%M')
     iddatumuurminuut_UTC_to_merrit = iddatumuurminuut_to_merrit
+    datetime_from_datumtabel = datetime_from - timedelta(hours = 48)
+    datetime_to_datumtabel = datetime_to + timedelta(hours = 48)
+    iddatumuurminuut_from_datumtabel = datetime_from_datumtabel.strftime('%Y%m%d%H%M')
+    iddatumuurminuut_to_datumtabel = datetime_to_datumtabel.strftime('%Y%m%d%H%M')
     return(datetime_to, datetime_from, 
            iddatumuurminuut_from, iddatumuurminuut_to,
            iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to,
@@ -28,7 +32,9 @@ def get_timing_bounds():
            iddatum_yesterday_from, iddatum_yesterday_to,
            datetime_from_merrit, datetime_to_merrit,
            iddatumuurminuut_to_merrit,
-           iddatumuurminuut_UTC_to_merrit)    
+           iddatumuurminuut_UTC_to_merrit,
+           iddatumuurminuut_from_datumtabel,
+           iddatumuurminuut_to_datumtabel)    
     
 def track_action_in_file(info_path, tstamp):
     with open(info_path, "a") as text_file:

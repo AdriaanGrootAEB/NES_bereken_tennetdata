@@ -19,11 +19,12 @@ if __name__ == "__main__":
     datetime_to, datetime_from, iddatumuurminuut_from, iddatumuurminuut_to, iddatumuurminuut_UTC_from, iddatumuurminuut_UTC_to, \
     datetime_yesterday_from, datetime_yesterday_to, iddatumuurminuut_yesterday_from, iddatumuurminuut_yesterday_to, \
     iddatum_yesterday_from, iddatum_yesterday_to, datetime_from_merrit, datetime_to_merrit, \
-    iddatumuurminuut_to_merrit, iddatumuurminuut_UTC_to_merrit = timing.get_timing_bounds()
+    iddatumuurminuut_to_merrit, iddatumuurminuut_UTC_to_merrit, \
+    iddatumuurminuut_from_datumtabel, iddatumuurminuut_to_datumtabel= timing.get_timing_bounds()
     
     # get data from Tennet API
     api_handler = API_handler.Handler()
-    do_settlement_data = timing.has_enough_time_passed('settlement_data', 60)       # Maximum requests per day: 25      run every hour (make timerange depend on missing data)
+    do_settlement_data = timing.has_enough_time_passed('settlement_data', 60)       # Maximum requests per day: 25      run every hour
     do_balancedelta_data = timing.has_enough_time_passed('balancedelta_data', 1)    # Maximum requests per day: 3000    run every minute
     do_merritorder_data = timing.has_enough_time_passed('meritorder_data', 15)      # Maximum requests per day: 600     run every 15 minutes
     
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     
     # get datum and EPEX prices from datawarehouse
     if do_balancedelta_data or do_merritorder_data:
-        datum_data = getdata.get_datumdata(server_name,  [iddatumuurminuut_from, iddatumuurminuut_to_merrit])
+        datum_data = getdata.get_datumdata(server_name, [iddatumuurminuut_from_datumtabel, iddatumuurminuut_to_datumtabel])
     if do_settlement_data:
         datum_yesterday_data = getdata.get_datumdata(server_name,  [iddatumuurminuut_yesterday_from, iddatumuurminuut_yesterday_to])
     if do_merritorder_data:
